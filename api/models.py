@@ -26,6 +26,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Is the user a member of staff?"""
         return self.is_admin
 
+    @property
+    def is_editor(self):
+        """
+        Is the user an editor who
+        can do anything with posts?
+        """
+        return self.groups.filter(name='Editors').exists()
+
+    @property
+    def is_journalist(self):
+        """
+        Is the user an journalist who can:
+        - edit its own posts
+        - add new posts
+        """
+        return self.groups.filter(name='Journalists').exists()
+
     def __str__(self):
         return f'User <{self.email}>'
 
@@ -36,6 +53,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     body = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Post <{self.title[:50]}>'
