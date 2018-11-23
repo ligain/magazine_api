@@ -13,7 +13,7 @@ $ docker build -t username/magazine .
 $ docker run -p 8000:8000 username/magazine
 ```
 ### Usage
-Swagger doc is avaliable by URL: http://0.0.0.0:8000/api-doc/
+Swagger doc is avaliable here: http://0.0.0.0:8000/api-doc/
 #### Get auth token for user
 ```
 $ curl -X POST -d "email=superadmin@example.com&password=sdf#DFDf1212" "http://0.0.0.0:8000/api-token-auth/"
