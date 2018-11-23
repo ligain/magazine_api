@@ -17,7 +17,9 @@ class PostView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_editor or user.is_admin:
+        if user.is_anonymous:
+            queryset = Post.objects.filter(is_published=True)
+        elif user.is_editor or user.is_admin:
             queryset = Post.objects.all()
         elif user.is_journalist:
             queryset = Post.objects.filter(author=user)
@@ -35,8 +37,11 @@ class PostSearchView(generics.ListAPIView):
         query_form = QueryForm({self.query_lookup: query})
         if query_form.is_valid():
             queryset = Post.objects.filter(
-                Q(title__icontains=query_form.cleaned_data[self.query_lookup]) |
-                Q(body__icontains=query_form.cleaned_data[self.query_lookup])
+                Q(
+                    Q(title__icontains=query_form.cleaned_data[self.query_lookup]) |
+                    Q(body__icontains=query_form.cleaned_data[self.query_lookup])
+                ),
+                is_published=True
             )
         else:
             queryset = Post.objects.none()

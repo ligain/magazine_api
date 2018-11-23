@@ -12,6 +12,6 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 ENV SECRET_KEY="dw-m=d3!i=qkf77f0z37#ejzhuplq!ccu96wd5*380-*t5)7pf"
 ENV DJANGO_SETTINGS_MODULE="magazine.settings"
-RUN python3 manage.py migrate
+RUN python3 manage.py migrate && python3 manage.py loaddata initial_data.json
 
 ENTRYPOINT python3 manage.py runserver 0.0.0.0:8000
